@@ -1,3 +1,5 @@
 *__pycache__
 database.db
 *.pytest*
+database/db.sqlite
+db.sqlite
