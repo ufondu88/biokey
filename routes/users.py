@@ -43,7 +43,7 @@ def get_user(id):
         user = session.query(User).get(id)
 
         if not user:
-            raise  NotFoundError(f'user with id {id} does not exist')
+            raise NotFoundError(f'user with id {id} does not exist')
         
         return jsonify(format_user(user)), 200
     except NotFoundError as e:
@@ -57,7 +57,7 @@ def update_user(id):
         user = session.query(User).get(id)
         
         if not user:
-            raise ValueError(f'user with id {id} does not exist')
+            raise NotFoundError(f'user with id {id} does not exist')
 
         data = request.get_json()
 
@@ -68,6 +68,8 @@ def update_user(id):
         session.commit()
 
         return jsonify({'message': 'user updated successfully'}), 200
+    except NotFoundError as e:
+        return jsonify({'error': str(e)}), 404
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
     except Exception as e:
@@ -87,6 +89,8 @@ def delete_user(id):
         return jsonify({'message': 'user deleted successfully'}), 200
     except NotFoundError as e:
         return jsonify({'error': str(e)}), 404
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
